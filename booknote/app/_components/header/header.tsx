@@ -1,6 +1,6 @@
 const Header=()=>{
     return(
-        <header className="flex items-center justify-between p-4 bg-white shadow-sm">
+        <header className="flex items-center justify-between p-4 bg-white border-b-[1px] border-green-200">
         <div className="flex items-center space-x-4">
           <h1 className="text-2xl font-bold text-green-500">Book Note</h1>
           {/* <nav className="flex space-x-4">
