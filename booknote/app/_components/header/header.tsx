@@ -1,4 +1,18 @@
+'use client'
+
+import { Label } from "@/components/ui/label";
+import useUserStore from "@/stores/user-store";
+import Link from "next/link"
+import { useStore } from "zustand";
+
+
 const Header=()=>{
+    const {user,setUser}=useStore(useUserStore,(state)=>state);
+
+    const isLogin=()=>{
+      return user.email!='';
+    }
+
     return(
         <header className="flex items-center justify-between p-4 bg-white border-b-[1px] border-green-200">
         <div className="flex items-center space-x-4">
@@ -24,7 +38,15 @@ const Header=()=>{
             />
             <SearchIcon className="absolute right-3 top-3 h-5 w-5 text-gray-500" />
           </div>
-          <button className="px-4 py-2 text-white bg-green-500 rounded-full">로그인</button>
+          {
+            isLogin()?
+            <Label>
+              {user.username}
+            </Label>:
+            <button className="px-4 py-2 text-white bg-green-500 rounded-full">
+              <Link href={"/login"}>로그인</Link>
+            </button>
+          }
         </div>
       </header>
     )

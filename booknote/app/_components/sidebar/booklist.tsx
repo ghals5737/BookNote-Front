@@ -1,19 +1,42 @@
+'use client'
+import { Button } from "@/components/ui/button";
 import Link from "next/link"
+import CreateBook from "../book/createbook";
+import { useStore } from "zustand";
+import useBookStore from "@/stores/book-store";
+import { useEffect } from "react";
+import BookApi from "@/api/books";
+import useUserStore from "@/stores/user-store";
 
 const BookList=()=>{
+    const {user}=useStore(useUserStore,(state)=>state)  
+    const {bookList,setBookList}=useStore(useBookStore,(state)=>state)
+    const bookApi=new BookApi()
+
+    useEffect(()=>{
+      bookApi.getBooksByUserId(user.id).then(res=>{
+        setBookList(res)
+      })
+    })
+
+
     return(
         <div className="grid grid-cols-1 bg-white">
-        <div className="flex items-center space-x-2 text-xl p-4 font-bold">
-          <BookIcon className="h-6 w-6 text-green-500" />
-          <span>내가 읽은 책 리스트</span>
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center space-x-2 text-xl p-4 font-bold">
+            <BookIcon className="h-6 w-6 text-green-500" />
+            <span>책 목록</span>
+          </div>
+          <CreateBook></CreateBook>          
         </div>
         <Link href="#" className="p-4 font-semibold text-primary border-b-[1px] border-green-200 hover:bg-green-100">
             전체
         </Link>
-        {['book1', 'book2', 'book3', 'book4', 'book5'].map((book, index) => (
+        {
+          bookList.map((book,index)=>(
             <div key={index} className="p-4 flex flex-col border-b-[1px] border-green-200 hover:bg-green-100">
                 <div>
-                    <Link href="#">{book}</Link>
+                    <Link href="#">{book.title}</Link>
                     <button className="ml-2">
                         <BookmarkIcon className="h-4 w-4 text-gray-500 hover:text-yellow-500" />
                     </button>
@@ -27,7 +50,8 @@ const BookList=()=>{
                 ))}
             </div>
             </div>
-        ))}
+          ))
+        }
         </div>
     )
 }

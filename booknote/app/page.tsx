@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Header from "./_components/header/header";
 import CreateMemo from "./_components/memo/creatememo";
-import MemoList from "./_components/sidebar/memolist";
 import BookList from "./_components/sidebar/booklist";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import MemoDetail from "./_components/memo/memo_detail";
+import MemoList from "./_components/memo/memolist";
 
 export default function Home() {
   return (
