@@ -1,26 +1,49 @@
-import { createStore } from 'zustand/vanilla'
+import {create} from 'zustand'
 
-export type MemoState = {
-  count: number
+interface memoState{
+  memo:Memo;
+  memoList: Memo[],
+  content:string;
+  setContent: (content:string)=>void;
+  addMemo: (memo:Memo)=>void;
+  setMemoList: (memoList: Memo[])=> void;
+  setMemo: (memo:Memo)=>void;
+  updateMemoList: (memo:Memo)=>void;
 }
 
-export type MemoActions = {
-  decrementMemo: () => void
-  incrementMemo: () => void
-}
+const useMemoStore = create<memoState>((set)=>({
+  memo:{
+    id:0,
+    book:{
+      id: 0,
+      title: '',
+      author: '',
+      user: {
+        id: 0,
+        email: '',
+        username: '',
+      },
+      createAt: new Date(),
+      updateAt: new Date(),
+    },
+    memo:'',
+    createAt: new Date(),
+    updateAt: new Date(),
+  },
+  content:'',
+  memoList: [],
+  setContent: (newContent) => set({content:newContent}),
+  addMemo: (newMemo) => set((state) => ({ memoList: [...state.memoList, newMemo] })),
+  setMemoList: (newMemoList) => set({ memoList: newMemoList }),
+  setMemo: (newMemo)=> set({memo:newMemo}),
+  updateMemoList: (memo) => set((state)=>({
+    memoList:state.memoList.map(item=>{
+      if(memo.id==item.id){
+        return memo
+      }
+      return item;
+    })
+  })),
+}));
 
-export type MemoStore = MemoState & MemoActions
-
-export const defaultInitState: MemoState = {
-  count: 0,
-}
-
-export const createMemoStore = (
-  initState: MemoState = defaultInitState,
-) => {
-  return createStore<MemoStore>()((set) => ({
-    ...initState,
-    decrementMemo: () => set((state) => ({ count: state.count - 1 })),
-    incrementMemo: () => set((state) => ({ count: state.count + 1 })),
-  }))
-}
+export default useMemoStore;

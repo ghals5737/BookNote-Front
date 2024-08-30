@@ -1,64 +1,90 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+'use client'
 
-const MemoDetail=()=>{
-    return(
-        <div className="w-full">
-            <div className="p-4 flex items-center gap-4 border-b-[1px] border-green-200">
-                <Avatar className="hidden sm:flex h-9 w-9">
-                <AvatarImage src="/avatars/02.png" alt="Avatar" />
-                <AvatarFallback>JL</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col flex-1">
-                <div className="flex justify-between items-center">
-                    <p className="text-sm font-medium leading-none">Jackson Lee</p>
-                    <p className="text-xs text-gray-500">2023-04-25 - 최적의 공부 뇌</p>
+import React, { useState, useRef, useEffect } from 'react'
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import useMemoStore from "@/stores/memo-store"
+import { useStore } from "zustand"
+import moment from "moment"
+import { marked } from 'marked'
+import { Star, Edit, PlusCircle } from "lucide-react"
+import UpdateMemo from './updatememo'
+
+const MemoDetail = () => {
+    const { memo } = useStore(useMemoStore, (state) => state)
+    const previewRef = useRef<HTMLDivElement>(null)
+    const [isUpdatingMemo, setIsUpdatingMemo] = useState(false)
+
+    useEffect(() => {
+        const parseMarkdown = async () => {
+            if (previewRef.current && memo) {
+                marked.setOptions({
+                    gfm: true,
+                    breaks: true,
+                })
+                const html = await marked(memo.memo)
+                previewRef.current.innerHTML = html
+            }
+        }
+        parseMarkdown()
+    }, [memo])
+
+    if (memo.id==0||!memo.id) {
+        return <div className="w-full p-6 text-center">메모를 선택해주세요.</div>
+    }
+
+    return (
+        <div className="w-full bg-white rounded-md border border-gray-300">
+            {isUpdatingMemo ? <UpdateMemo></UpdateMemo>:
+            <div className="p-6">
+                <div className="mb-4">
+                    <h3 className="text-2xl font-bold mb-2">{memo.book.title}</h3>
                 </div>
-                </div>
-            </div>
-            <div className="p-4">
-                <div className="flex items-center">
-                    <p className="mr-2 font-semibold">책 제목</p>
+                <div className="flex items-center justify-between mb-4">
+                    <div>
+                        <p className="text-sm font-medium text-gray-600">{memo.book.user.username}</p>
+                        <p className="text-xs text-gray-500">{moment(memo.createAt).format("yyyy/MM/dd")}</p>
+                    </div>
                     <div className="flex items-center">
-                        <StarIcon className="h-4 w-4 fill-yellow-500" />
-                        <StarIcon className="h-4 w-4 fill-yellow-500" />
-                        <StarIcon className="h-4 w-4 fill-yellow-500" />
-                        <StarIcon className="h-4 w-4 fill-gray-300" />
-                        <StarIcon className="h-4 w-4 fill-gray-300" />
+                        {[...Array(5)].map((_, i) => (
+                            <Star
+                                key={i}
+                                className={`h-4 w-4 ${i < 3 ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300 fill-gray-300'}`}
+                            />
+                        ))}
                     </div>
                 </div>
-                <p className="mt-4">
-                시간은 우리에게 주어진 가장 소중한 자원이다. 그것을 어떻게 활용하느냐에 따라 삶의 질이 결정된다.
-                </p>
-                <div className="mt-2">
-                    <Badge variant="outline">ddd</Badge>
+                <div
+                    ref={previewRef}
+                    className="prose text-gray-700 mt-2 py-4 px-1 max-w-full"
+                />
+                <div className="mt-4 flex flex-wrap gap-2">
+                    {/* {memo.tags && memo.tags.map((tag, index) => (
+                        <Badge key={index} variant="secondary">{tag}</Badge>
+                    ))} */}
                 </div>
                 <div className="flex justify-end mt-4">
-                <button className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
-                    수정하기
-                </button>
+                <Button
+                  variant="outline"
+                  className={`text-white ${isUpdatingMemo ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'}`}
+                  onClick={() => setIsUpdatingMemo(!isUpdatingMemo)}
+              >
+                  {isUpdatingMemo ? (
+                      <>
+                          <X className="mr-2 h-4 w-4" />
+                          취소
+                      </>
+                  ) : (
+                      <>
+                          <PlusCircle className="mr-2 h-4 w-4" />
+                          메모 수정
+                      </>
+                  )}
+              </Button>
                 </div>
             </div>
-        </div>
-    )
-}
-
-function StarIcon(props:any) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-      </svg>
+            }
+        </div>        
     )
 }
 

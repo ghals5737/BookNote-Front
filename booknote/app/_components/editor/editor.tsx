@@ -1,10 +1,12 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
 import { marked } from 'marked';
+import { useStore } from 'zustand';
+import useMemoStore from '@/stores/memo-store';
 
 
 const MarkdownEditor: React.FC = () => {
-  const [content, setContent] = useState<string>('');
+  const {content,setContent}=useStore(useMemoStore,(state)=>state);
   const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

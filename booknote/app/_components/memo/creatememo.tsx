@@ -1,8 +1,35 @@
+'use client'
+
+import { useStore } from "zustand"
 import MarkDownEditor from "../editor/editor"
+import useMemoStore from "@/stores/memo-store"
+import MemoApi from "@/api/memos";
+import { useState } from "react"
+import useBookStore from "@/stores/book-store";
 
 const CreateMemo=()=>{
+    const {content}=useStore(useMemoStore,(state)=>state);
+    const {book}=useStore(useBookStore,(state)=>state);
+    const {addMemo}=useStore(useMemoStore,(state)=>state);
+    const memoApi=new MemoApi();
+    const [error, setError] = useState('')
+
+    const handleSubmit = async(e:React.FormEvent) => {
+        e.preventDefault()
+        
+        if(!content){
+          setError('Please fill in all fields')
+        }else{
+          const memo=await memoApi.create({
+            bookId:book.id,
+            memo:content
+          })
+          addMemo(memo)
+        }
+    }
+
     return (
-        <div className="flex flex-col items-center min-h-screen p-4">
+        <div className="flex flex-col items-center p-4">
       <div className="w-full max-w-3xl">
         <h3 className="flex items-center space-x-2 text-xl font-bold">
           <PencilIcon className="h-6 w-6 text-green-500" />
@@ -11,7 +38,7 @@ const CreateMemo=()=>{
         <p className="text-gray-500">책을 읽으면서 중요한 부분을 메모해보세요.</p>
         <div className="mt-4">
           <MarkDownEditor />
-          <button className="px-4 py-2 mt-2 text-white bg-green-500 rounded-md">저장</button>
+          <button onClick={handleSubmit} className="px-4 py-2 mt-2 text-white bg-green-500 rounded-md">저장</button>
         </div>
       </div>
     </div>

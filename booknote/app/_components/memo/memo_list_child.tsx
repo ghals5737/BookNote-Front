@@ -1,32 +1,65 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+'use client'
+
+import React, { useState, useRef, useEffect } from 'react'
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import moment from "moment"
+import { marked } from 'marked'
+import { Trash2 } from "lucide-react"
 
-const MemoListChild=()=>{
-    return(
-        <button className="p-4 w-full bg-white rounded-md mb-4 border border-gray-300 hover:bg-green-100 hover:border-green-500">
-            <div className="flex items-center gap-4">
-                <Avatar className="hidden sm:flex h-9 w-9">
-                <AvatarImage src="/avatars/02.png" alt="Avatar" />
-                <AvatarFallback>JL</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col flex-1">
-                <div className="flex justify-between items-center">
-                    <p className="text-sm font-medium leading-none">Jackson Lee</p>
-                    <p className="text-xs text-gray-500">2023-04-25 - 최적의 공부 뇌</p>
-                </div>
-                </div>
+const MemoListChild = ({ memo }: { memo: Memo}) => {
+    const previewRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const parseMarkdown = async () => {
+            if (previewRef.current) {
+                marked.setOptions({
+                    gfm: true,
+                    breaks: true,
+                });
+                const html = await marked(memo.memo);
+                previewRef.current.innerHTML = html;
+            }
+        };
+        parseMarkdown();
+    }, [memo.memo]);
+
+    const deleteMemo = (id: number) => {
+        // Implement delete functionality here
+        //onDelete(id.toString());
+    }
+
+    return (
+        <div className="p-6 w-full bg-white rounded-md mb-4 border border-gray-300 hover:border-green-500 transition-colors">
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-bold mb-2">{memo.book.title}</h3>                
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-red-500 hover:text-red-700 hover:bg-red-100"
+                    onClick={() => deleteMemo(memo.id)}
+                >
+                    <Trash2 className="h-5 w-5" />
+                    <span className="sr-only">Delete memo</span>
+                </Button>
             </div>
-            <div className="flex flex-col items-start">
-            <p className="text-gray-700 mt-2 py-4 px-1">
-                    시간은 우리에게 주어진 가장 소중한 자원이다. 그것을 어떻게 활용하느냐에 따라 삶의 질이 결정된다.
-            </p>
-            <div className="mt-2">
-                <Badge variant="outline">ddd</Badge>
+            <div className="flex items-center justify-between mb-4">
+                <div>
+                    <p className="text-sm font-medium text-gray-600">{memo.book.user.username}</p>
+                    <p className="text-xs text-gray-500">{moment(memo.createAt).format("yyyy/MM/dd")}</p>
+                </div>                
             </div>
+            <div
+                ref={previewRef}
+                className="prose text-gray-700 mt-2 py-4 px-1 max-w-full"
+            />
+            <div className="mt-4 flex flex-wrap gap-2">
+                {/* {memo.tags && memo.tags.map((tag, index) => (
+                    <Badge key={index} variant="secondary">{tag}</Badge>
+                ))} */}
             </div>
-        </button>
+        </div>
     )
-
 }
 
 export default MemoListChild
