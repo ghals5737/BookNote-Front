@@ -11,10 +11,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Book, Bookmark, Edit, MoreVertical, Star, Trash2 } from "lucide-react";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import UpdateBook from "../book/updatebook";
 
 const BookList = () => {
   const { user } = useStore(useUserStore, (state) => state);
-  const { bookList, setBookList, setBook } = useStore(useBookStore, (state) => state);
+  const { bookList, setBookList, setBook, book } = useStore(useBookStore, (state) => state);
+  const [selctedBook,setSelectedBook] = useState<Book>(book)
+  const [isOpen, setIsOpen] = useState(false)
 
   const bookApi = useMemo(() => new BookApi(), []); 
 
@@ -29,6 +32,8 @@ const BookList = () => {
       setIsLoading(false);
     });
   }, [user.id, setBookList, bookApi]); // Dependencies are now stable
+
+  
 
   const LoadingSkeleton = () => (
     <>
@@ -63,6 +68,15 @@ const BookList = () => {
     alert("b")
   }
 
+  const handleUpdateBook = (book: Book) => {
+    setSelectedBook(book)
+    setIsOpen(true)
+  }
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open)    
+  }
+
   return (
     <div className="grid grid-cols-1 bg-white">
       {isLoading ? (
@@ -90,14 +104,14 @@ const BookList = () => {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
+                        {/* <span className="sr-only">Open menu</span> */}
                         <MoreVertical className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => (book)}>
+                      <DropdownMenuItem onSelect={() => handleUpdateBook(book)}>                        
                         <Edit className="mr-2 h-4 w-4" />
-                        <span>수정</span>
+                        <span>책 수정</span>            
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => (book)}>
                         <Trash2 className="mr-2 h-4 w-4" />
@@ -114,6 +128,13 @@ const BookList = () => {
               </div>
             </div>
           ))}
+          {isOpen && (
+            <UpdateBook 
+              book={selctedBook} 
+              isOpen={isOpen}
+              onOpenChange={handleOpenChange}
+            />
+          )}
         </>
       )}
     </div>

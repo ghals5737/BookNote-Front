@@ -19,6 +19,14 @@ class BookApi{
         const response=await axios.get(`${this.apiUrl}/users/${userId}`)
         return response.data
     }
+
+    async update(bookId:number,bookUpdate:BookUpdate):Promise<Book>{
+        const response=await axios.put<Book>(
+            `${this.apiUrl}/${bookId}`,
+            bookUpdate
+        )
+        return response.data
+    }
 }
 
 export default BookApi

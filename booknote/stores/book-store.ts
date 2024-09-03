@@ -6,6 +6,7 @@ interface bookState{
     setBook: (book: Book) => void;
     addBook: (book: Book) => void;
     setBookList: (bookList: Book[]) => void;
+    updateBookList: (bok: Book)=> void;
 }
 
 const useBookStore = create<bookState>((set) => ({
@@ -25,6 +26,14 @@ const useBookStore = create<bookState>((set) => ({
     setBook: (newBook) => set({ book: newBook }),
     addBook: (newBook) => set((state) => ({ bookList: [...state.bookList, newBook] })),
     setBookList: (newBookList) => set({ bookList: newBookList }),
+    updateBookList: (book) => set((state) => ({
+      bookList:state.bookList.map(item=>{
+        if(book.id==item.id){
+          return book
+        }
+        return item
+      })
+    }))
   }));
   
   export default useBookStore;

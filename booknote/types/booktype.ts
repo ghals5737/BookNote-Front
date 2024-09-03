@@ -12,3 +12,7 @@ interface BookCreate{
     title:string;
     author:string;
 }
+
+interface BookUpdate{
+    title: string;
+}
