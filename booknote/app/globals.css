@@ -67,3 +67,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+.w-md-editor-preview {
+  @apply prose prose-sm sm:prose lg:prose-lg xl:prose-xl ;
+}
+
+.w-md-editor-preview ::marker {
+  color: black;
+}
