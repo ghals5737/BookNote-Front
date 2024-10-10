@@ -1,17 +1,17 @@
 import {create} from 'zustand'
 
 interface bookState{
-    book:Book,
+    selectedBook:Book,
     bookList: Book[];
-    setBook: (book: Book) => void;
+    setSelectedBook: (book: Book) => void;
     addBook: (book: Book) => void;
     setBookList: (bookList: Book[]) => void;
     updateBookList: (bok: Book)=> void;
 }
 
 const useBookStore = create<bookState>((set) => ({
-    book: {
-      id: 0,
+    selectedBook: {
+      id: -1,
       title: '',
       author: '',
       user: {
@@ -19,11 +19,12 @@ const useBookStore = create<bookState>((set) => ({
         email: '',
         username: '',
       },
+      isPinned: false,
       createAt: new Date(),
       updateAt: new Date(),
     },
     bookList: [],
-    setBook: (newBook) => set({ book: newBook }),
+    setSelectedBook: (newBook) => set({ selectedBook: newBook }),
     addBook: (newBook) => set((state) => ({ bookList: [...state.bookList, newBook] })),
     setBookList: (newBookList) => set({ bookList: newBookList }),
     updateBookList: (book) => set((state) => ({

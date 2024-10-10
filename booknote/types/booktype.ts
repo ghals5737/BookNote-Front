@@ -3,6 +3,7 @@ interface Book{
     title:string;
     author:string;
     user:User;
+    isPinned:boolean;
     createAt:Date;
     updateAt:Date;
 }

@@ -14,15 +14,14 @@ const MDEditor = dynamic(
 interface EditMemoDialogProps {
     isOpen: boolean
     onOpenChange: (open: boolean) => void
-    memo: Memo | null
-    onSave: (updatedMemo: Memo) => void
+    content: string
   }
 
-const MemoUpdate=({ isOpen, onOpenChange, memo, onSave }: EditMemoDialogProps)=>{
-    const [editedContent, setEditedContent] = useState('')
+const MemoUpdate=({ isOpen, onOpenChange, content }: EditMemoDialogProps)=>{
+    const [editedContent, setEditedContent] = useState(content)
 
     const handleSave=()=>{
-        
+
     }
 
     return (
@@ -33,15 +32,14 @@ const MemoUpdate=({ isOpen, onOpenChange, memo, onSave }: EditMemoDialogProps)=>
                 <DialogDescription>
                     아래에서 메모 내용을 수정하세요. 마크다운 형식을 지원합니다.
                 </DialogDescription>
-                </DialogHeader>
-                <ScrollArea className="h-[400px] w-full rounded-md border p-4">
+                </DialogHeader>                
                 <MDEditor
                     value={editedContent}
                     onChange={(value) => setEditedContent(value || '')}
-                    preview="edit"
+                    preview="live"
+                    hideToolbar={true}
                     height={350}
-                />
-                </ScrollArea>
+                />                
                 <DialogFooter>
                 <Button variant="outline" onClick={() => onOpenChange(false)}>
                     취소

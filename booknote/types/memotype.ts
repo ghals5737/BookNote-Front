@@ -1,7 +1,7 @@
 interface Memo{
     id:number;
     book:Book;
-    memo:string;
+    content:string;
     createAt:Date;
     updateAt:Date;
 }

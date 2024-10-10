@@ -9,7 +9,7 @@ const MDEditor = dynamic(
     { ssr: false }
 )
 
-const Editor=()=>{
+const MemoCreate=()=>{
     const [newNote, setNewNote] = useState('')
 
     return (
@@ -28,4 +28,4 @@ const Editor=()=>{
         </div>
     )    
 }
-export default Editor;
+export default MemoCreate;
