@@ -75,3 +75,14 @@
 .w-md-editor-preview ::marker {
   color: black;
 }
+
+.wmde-markdown pre > code {
+  padding: 0px;
+  color: rgb(20, 20, 20); 
+  font-weight: 500;
+}
+
+.wmde-markdown blockquote > :first-child  {
+  color: rgb(20, 20, 20); 
+  font-weight: 500;
+}

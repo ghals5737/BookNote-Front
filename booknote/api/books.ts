@@ -15,8 +15,8 @@ class BookApi{
         return response.data
     }
 
-    async getBooksByUserId(userId:number):Promise<Book[]>{
-        const response=await axios.get(`${this.apiUrl}/users/${userId}`)
+    async getBooksByUserId(userId:number,isPinned:boolean):Promise<Book[]>{
+        const response=await axios.get(`${this.apiUrl}/users/${userId}?isPinned=${isPinned}`)
         return response.data
     }
 
@@ -26,6 +26,10 @@ class BookApi{
             bookUpdate
         )
         return response.data
+    }
+
+    async delete(bookId:number){
+        await axios.delete(`${this.apiUrl}/${bookId}`)
     }
 }
 

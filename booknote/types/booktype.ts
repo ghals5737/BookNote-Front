@@ -1,7 +1,6 @@
 interface Book{
     id:number;
     title:string;
-    author:string;
     user:User;
     isPinned:boolean;
     createAt:Date;
@@ -10,10 +9,19 @@ interface Book{
 
 interface BookCreate{
     userId:number;
-    title:string;
-    author:string;
+    title:string;   
+    isPinned:boolean; 
 }
 
 interface BookUpdate{
     title: string;
+    isPinned:boolean; 
+}
+
+interface SearchBook{
+    title: string;
+    image: string;
+    author: string;
+    description: string;
+    index: number;
 }

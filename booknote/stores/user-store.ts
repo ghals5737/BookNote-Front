@@ -12,7 +12,8 @@ const useUserStore = create(
         user: {
             id:0,
             email:'',
-            username:''
+            name:'',
+            picture:''
         },
         setUser: (newUser) => set({ user: newUser }),
       }),

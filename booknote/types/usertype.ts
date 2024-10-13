@@ -1,13 +1,14 @@
 interface User{
-    id:number;
-    email:string;
-    username:string;    
+    id:number,
+      email:string,
+      name:string,
+      picture:string
 }
 
 interface UserCreate{
-    email:string;
-    username:string;
-    password:string;
+    email:string | null | undefined;
+    name:string | null | undefined;
+    picture:string | null | undefined;
 }
 
 interface UserLogin{

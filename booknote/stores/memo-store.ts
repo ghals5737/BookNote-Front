@@ -9,6 +9,7 @@ interface memoState{
   setMemoList: (memoList: Memo[])=> void;
   setMemo: (memo:Memo)=>void;
   updateMemoList: (memo:Memo)=>void;
+  deleteMemo: (memo:Memo)=>void;
 }
 
 const useMemoStore = create<memoState>((set)=>({
@@ -21,12 +22,14 @@ const useMemoStore = create<memoState>((set)=>({
       user: {
         id: 0,
         email: '',
-        username: '',
+        name: '',
+        picture: ''
       },
       isPinned: false,
       createAt: new Date(),
       updateAt: new Date(),
     },
+    title:'',
     content:'',
     createAt: new Date(),
     updateAt: new Date(),
@@ -45,6 +48,9 @@ const useMemoStore = create<memoState>((set)=>({
       return item;
     })
   })),
+  deleteMemo: (memo) => set((state) => ({
+    memoList: state.memoList.filter(item => item.id !== memo.id)
+  }))
 }));
 
 export default useMemoStore;

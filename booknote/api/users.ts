@@ -15,10 +15,10 @@ class UserApi{
     return response.data
   }
 
-  async login(userLogin:UserLogin):Promise<User>{
-    const response=await axios.post<User>(
+  async login(userCreate:UserCreate):Promise<string>{
+    const response=await axios.post<string>(
       `${this.apiUrl}/login`,
-      userLogin
+      userCreate
     )
     return response.data
   }

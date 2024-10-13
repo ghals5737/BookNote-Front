@@ -27,6 +27,11 @@ class MemoApi{
         )
         return response.data
     }
+
+    async delete(id:number):Promise<Memo>{
+        const response=await axios.delete<Memo>(`${this.apiUrl}/${id}`)
+        return response.data
+    }
 }
 
 export default MemoApi

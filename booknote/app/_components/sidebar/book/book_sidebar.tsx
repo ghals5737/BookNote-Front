@@ -6,7 +6,7 @@ import UserDropDown from "../../user/user_dropdown"
 import BookList from "../../book/book_list"
 import BookCreate from "../../book/book_create"
 
-const BookSidebar=()=>{
+const BookSidebar=()=>{   
     return (
         <div className="w-full md:w-64 border-b md:border-r border-gray-200 p-4 flex flex-col bg-white">
             <div className="flex items-center justify-between mb-4">
@@ -18,7 +18,7 @@ const BookSidebar=()=>{
                 </Link>
                 <UserDropDown></UserDropDown>            
             </div>
-            <BookList></BookList>
+            <BookList></BookList>           
             <BookCreate></BookCreate>
         </div>
     )

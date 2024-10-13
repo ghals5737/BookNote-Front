@@ -1,6 +1,7 @@
 interface Memo{
     id:number;
     book:Book;
+    title:string;
     content:string;
     createAt:Date;
     updateAt:Date;
@@ -8,9 +9,11 @@ interface Memo{
 
 interface MemoCreate{
     bookId:number;
-    memo:string;
+    title:string;
+    content:string;
 }
 
 interface MemoUpdate{
-    memo:string;
+    title:string;
+    content:string;
 }

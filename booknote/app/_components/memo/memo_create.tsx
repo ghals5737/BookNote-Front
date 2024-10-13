@@ -1,31 +1,65 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
+import MemoApi from '@/api/memos'
+import useMemoStore from '@/stores/memo-store'
+import { useStore } from 'zustand'
+import useBookStore from '@/stores/book-store'
+
+const memoApi = new MemoApi()
 
 const MDEditor = dynamic(
     () => import("@uiw/react-md-editor").then((mod) => mod.default),
     { ssr: false }
 )
 
-const MemoCreate=()=>{
-    const [newNote, setNewNote] = useState('')
+const MemoCreate = () => {
+    const [title, setTitle] = useState('')
+    const [newContent, setNewContent] = useState('')
+    const { addMemo, memoList } = useStore(useMemoStore, (state) => state)
+    const { selectedBook } = useStore(useBookStore, (state) => state)
+
+
+    
+    const saveMemo = async () => {       
+        const memo = await memoApi.create({
+            bookId: selectedBook.id,
+            title: title.trim()?title:`${selectedBook.title}(${memoList.length+1})`,
+            content: newContent
+        })
+        addMemo(memo)
+        setTitle('')
+        setNewContent('')
+    }
 
     return (
         <div className="p-4">
+            <input
+                type="text"
+                placeholder="제목을 입력하세요 (선택사항)"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full p-2 mb-4 border rounded"
+            />
             <MDEditor
-                value={newNote}
-                onChange={(value) => setNewNote(value || '')}
+                value={newContent}
+                onChange={(value) => setNewContent(value || '')}
                 preview="live"
                 hideToolbar={true}
-                height={300}                     
+                height={300}
             />
             
-            <Button onClick={() => {/* 메모 저장 로직 */}} className="mt-4">
+            <Button 
+                onClick={saveMemo} 
+                className="mt-4"
+                disabled={!newContent.trim()}
+            >
                 메모 저장
             </Button>
         </div>
-    )    
+    )
 }
-export default MemoCreate;
+
+export default MemoCreate

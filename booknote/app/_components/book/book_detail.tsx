@@ -9,28 +9,53 @@ import { useStore } from "zustand"
 import useBookStore from "@/stores/book-store"
 import useMemoStore from "@/stores/memo-store"
 import MemoList from "../memo/memo_list"
+import MemoApi from "@/api/memos"
+import BookApi from "@/api/books"
+
+const memoApi=new MemoApi()
+const bookApi=new BookApi()
 
 const BookDetail=()=>{
-    const {selectedBook,bookList,setSelectedBook,setBookList}=useStore(useBookStore,(state)=>state)
-    const {memoList,memo,setMemo}=useStore(useMemoStore,(state)=>state)
+    const {selectedBook,setSelectedBook,bookList,addBook,addPinBook,deletePinBook,deleteBook}=useStore(useBookStore,(state)=>state)
+    const {memoList,setMemoList,memo,setMemo}=useStore(useMemoStore,(state)=>state)
     const [isWritingSectionOpen, setIsWritingSectionOpen] = useState(false)
-    const togglePin = (bookId: number) => {
-        setBookList(bookList.map(book => 
-          book.id === bookId ? { ...book, isPinned: !book.isPinned } : book
-        ))
+
+    const togglePin = async() => {   
+        await bookApi.update(
+            selectedBook.id,
+            {
+                title:selectedBook.title,
+                isPinned:!selectedBook.isPinned
+            })     
+        const toggleBook={...selectedBook,isPinned:!selectedBook.isPinned}   
+        if(selectedBook.isPinned){
+            deletePinBook(toggleBook)
+            addBook(toggleBook)
+        }else{
+            deleteBook(toggleBook)
+            addPinBook(toggleBook)
+        }    
+        setSelectedBook(toggleBook)
     }
     const writingSectionRef = useRef<HTMLDivElement>(null)
+    
+
+    useEffect(()=>{
+        memoApi.getMemosByBookId(selectedBook.id).then(data=>{
+            setMemoList(data)
+        })        
+    },[selectedBook])
 
     return (
         <div>
         <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{bookList.find(b => b.id === selectedBook.id)?.title}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{selectedBook.title}</h1>
             <div className="flex items-center space-x-2">
             <Button
                 variant="ghost"
-                onClick={() => togglePin(selectedBook.id)}
+                onClick={() => togglePin()}
             >
-                <Pin className={`h-4 w-4 ${bookList.find(b => b.id === selectedBook.id)?.isPinned ? 'text-yellow-500' : 'text-gray-400'}`} />
+                <Pin className={`h-4 w-4 ${selectedBook.isPinned ? 'text-yellow-500' : 'text-gray-400'}`} />
             </Button>
             <Button
                 variant="outline"

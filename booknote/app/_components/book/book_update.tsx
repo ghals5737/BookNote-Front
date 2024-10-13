@@ -38,12 +38,13 @@ interface SearchBook {
   index: number;
 }
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-const BookCreate = () => {
-  const {user}=useStore(useUserStore,(state)=>state)    
-  const {addBook}=useStore(useBookStore,(state)=>state)  
-  const [isOpen, setIsOpen] = useState(false)
-  const [isFirst, setIsFirst] = useState(false)
+interface EditBookDialogProps {
+    isOpen: boolean
+    onOpenChange: (open: boolean) => void
+    title: string
+  }
+const BookUpdate = ({ isOpen, onOpenChange, title }: EditBookDialogProps) => {
+  const {book,updateBookList}=useStore(useBookStore,(state)=>state)  
   const [searchQuery, setSearchQuery] = useState('')
   const [manualTitle, setManualTitle] = useState('')
   const [searchResults, setSearchResults] = useState<SearchBook[]>([])
@@ -66,6 +67,10 @@ const BookCreate = () => {
     }, 300),
     []
   )
+  useEffect(() => {
+    setSearchQuery(title)
+    setManualTitle(title)
+  },[title])
 
   useEffect(() => {        
     if (searchQuery!==''&&isOpen) { 
@@ -75,28 +80,26 @@ const BookCreate = () => {
   }, [searchQuery, debouncedSearch, isOpen])
 
 
-  const handleAddBook = async() => {
+  const handleUpdateBook = async() => {
     if (selectedBook) {
       console.log(`Adding book: ${selectedBook.title}`)
-      const book=await bookApi.create({
-        userId:user.id,
+      const updatedBook=await bookApi.update(book.id,{        
         title:selectedBook.title,
-        isPinned:false
+        isPinned:book.isPinned
       })
-      addBook(book)
-      setIsOpen(false)
+      updateBookList(updatedBook)
+      onOpenChange(false)
       setSelectedBook(null)
       setSearchQuery('')
       setManualTitle('')
     } else if (manualTitle) {
       console.log(`Adding book: ${manualTitle}`)
-      const book=await bookApi.create({
-        userId:user.id,
+      const updatedBook=await bookApi.update(book.id,{        
         title:manualTitle,
-        isPinned:false
+        isPinned:book.isPinned
       })
-      addBook(book)
-      setIsOpen(false)
+      updateBookList(updatedBook)
+      onOpenChange(false)
       setSelectedBook(null)
       setSearchQuery('')
       setManualTitle('')
@@ -111,10 +114,7 @@ const BookCreate = () => {
   }
   
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">책 추가</Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>      
       <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>새 책 추가</DialogTitle>
@@ -209,14 +209,14 @@ const BookCreate = () => {
           </TabsContent>
         </Tabs>
         <DialogFooter>
-          <Button variant="outline" onClick={() => setIsOpen(false)}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             취소
           </Button>
           <Button 
-            onClick={handleAddBook} 
+            onClick={handleUpdateBook} 
             disabled={(selectedBook === null && manualTitle === '')}
           >
-            추가
+            수정
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -233,4 +233,4 @@ function debounce<F extends (...args: any[]) => any>(func: F, wait: number): F {
   } as F
 }
 
-export default BookCreate;
+export default BookUpdate;
