@@ -21,9 +21,11 @@ import useUserStore from "@/stores/user-store"
 import { useStore } from 'zustand'
 import useBookStore from '@/stores/book-store'
 import BookApi from '@/api/books'
+import ActivityApi from '@/api/activity'
 
 const searchApi = new SearchApi()
 const bookApi = new BookApi()
+const activityApi = new ActivityApi()
 
 const searchBooks = async (query: string): Promise<SearchBook[]> => {
   await new Promise(resolve => setTimeout(resolve, 500)) // Simulate network delay
@@ -51,6 +53,7 @@ const BookUpdate = ({ isOpen, onOpenChange, title }: EditBookDialogProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedBook, setSelectedBook] = useState<SearchBook | null>(null)
   const [hoveredBook, setHoveredBook] = useState<SearchBook | null>(null) 
+  const {user}=useStore(useUserStore,(state)=>state) 
 
   const debouncedSearch = useCallback(
     debounce(async (query: string) => {
@@ -86,7 +89,15 @@ const BookUpdate = ({ isOpen, onOpenChange, title }: EditBookDialogProps) => {
       const updatedBook=await bookApi.update(book.id,{        
         title:selectedBook.title,
         isPinned:book.isPinned
-      })
+      })   
+      await activityApi.create(activityApi.generateActivity(        
+        'book.update',
+        user,
+        {
+          before:activityApi.convertBookTarget(book) ,
+          after:activityApi.convertBookTarget(updatedBook)
+        } as BookUpdateTarget                  
+      ))   
       updateBookList(updatedBook)
       onOpenChange(false)
       setSelectedBook(null)
@@ -97,7 +108,15 @@ const BookUpdate = ({ isOpen, onOpenChange, title }: EditBookDialogProps) => {
       const updatedBook=await bookApi.update(book.id,{        
         title:manualTitle,
         isPinned:book.isPinned
-      })
+      })      
+      await activityApi.create(activityApi.generateActivity(        
+        'book.update',
+        user,
+        {
+          before:activityApi.convertBookTarget(book) ,
+          after:activityApi.convertBookTarget(updatedBook)
+        } as BookUpdateTarget                  
+      )) 
       updateBookList(updatedBook)
       onOpenChange(false)
       setSelectedBook(null)

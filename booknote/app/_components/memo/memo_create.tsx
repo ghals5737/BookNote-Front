@@ -7,8 +7,11 @@ import MemoApi from '@/api/memos'
 import useMemoStore from '@/stores/memo-store'
 import { useStore } from 'zustand'
 import useBookStore from '@/stores/book-store'
+import ActivityApi from '@/api/activity'
+import useUserStore from '@/stores/user-store'
 
 const memoApi = new MemoApi()
+const activityApi = new ActivityApi()
 
 const MDEditor = dynamic(
     () => import("@uiw/react-md-editor").then((mod) => mod.default),
@@ -20,6 +23,7 @@ const MemoCreate = () => {
     const [newContent, setNewContent] = useState('')
     const { addMemo, memoList } = useStore(useMemoStore, (state) => state)
     const { selectedBook } = useStore(useBookStore, (state) => state)
+    const {user}=useStore(useUserStore,(state)=>state)    
 
 
     
@@ -29,6 +33,11 @@ const MemoCreate = () => {
             title: title.trim()?title:`${selectedBook.title}(${memoList.length+1})`,
             content: newContent
         })
+        await activityApi.create(activityApi.generateActivity(
+            'memo.create',
+            user,
+            activityApi.convertMemoTarget(memo)
+        ))
         addMemo(memo)
         setTitle('')
         setNewContent('')

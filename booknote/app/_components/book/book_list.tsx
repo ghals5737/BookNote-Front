@@ -7,14 +7,18 @@ import useBookStore from "@/stores/book-store"
 import BookApi from "@/api/books"
 import BookUpdate from "./book_update"
 import BookItem from "./book_item"
+import ActivityApi from "@/api/activity"
+import useUserStore from "@/stores/user-store"
 
 const bookApi = new BookApi()
+const activityApi = new ActivityApi()
 
 
 const BookList = () => {
     const { selectedBook, setBook, deleteBook, setSelectedBook, bookList, pinBookList } = useStore(useBookStore, (state) => state)
     const [isOpen, setIsOpen] = useState(false)
     const [title, setTitle] = useState('')   
+    const {user}=useStore(useUserStore,(state)=>state) 
 
     const handleEdit = (book: Book) => {
         setBook(book)
@@ -26,6 +30,11 @@ const BookList = () => {
         if (window.confirm(`정말로 ${book.title} 이 책을 삭제하시겠습니까?`)) {
             await bookApi.delete(book.id)
             deleteBook(book)
+            await activityApi.create(activityApi.generateActivity(
+                'book.delete',
+                user,
+                activityApi.convertBookTarget(book)
+            ))
         }
     }
 

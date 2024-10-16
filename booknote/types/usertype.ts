@@ -1,8 +1,8 @@
 interface User{
     id:number,
-      email:string,
-      name:string,
-      picture:string
+    email:string,
+    name:string,
+    picture:string
 }
 
 interface UserCreate{
@@ -14,4 +14,9 @@ interface UserCreate{
 interface UserLogin{
     email:string;
     password:string;
+}
+
+interface Token{
+    access_token:string,
+    refresh_token:string
 }

@@ -1,14 +1,14 @@
-import axios from "axios";
+import axiosInstance from './axiosInstance';
 
 class MemoApi{
     private apiUrl:string;
 
     constructor(){
-        this.apiUrl='http://localhost:8080/api/memos';
+        this.apiUrl='/memos';
     }
 
     async create(memoCreate:MemoCreate):Promise<Memo>{
-        const response=await axios.post<Memo>(
+        const response=await axiosInstance.post<Memo>(
             `${this.apiUrl}`,
             memoCreate
         )
@@ -16,12 +16,12 @@ class MemoApi{
     }
 
     async getMemosByBookId(bookId:number):Promise<Memo[]>{
-        const response=await axios.get(`${this.apiUrl}/books/${bookId}`)
+        const response=await axiosInstance.get(`${this.apiUrl}/books/${bookId}`)
         return response.data
     }
 
     async update(id:number,memoUpdate:MemoUpdate):Promise<Memo>{
-        const response=await axios.put<Memo>(
+        const response=await axiosInstance.put<Memo>(
             `${this.apiUrl}/${id}`,
             memoUpdate
         )
@@ -29,7 +29,7 @@ class MemoApi{
     }
 
     async delete(id:number):Promise<Memo>{
-        const response=await axios.delete<Memo>(`${this.apiUrl}/${id}`)
+        const response=await axiosInstance.delete<Memo>(`${this.apiUrl}/${id}`)
         return response.data
     }
 }

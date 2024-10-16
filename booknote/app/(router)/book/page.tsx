@@ -12,7 +12,9 @@ import useUserStore from "@/stores/user-store"
 import BookApi from "@/api/books"
 import MemoApi from "@/api/memos"
 import SkeletonLoading from "@/app/_components/skeleton/skeleton_loading"
+import ActivityApi from "@/api/activity"
 const bookApi=new BookApi()  
+const activityApi=new ActivityApi()
 
 const Page=()=>{
     const { data: session, status  } = useSession();
@@ -30,7 +32,7 @@ const Page=()=>{
             setSelectedBook(book_list[0])
         }
         setPinBookList(pin_book_list)
-        setBookList(book_list)            
+        setBookList(book_list) 
     }
 
     useEffect(()=>{                

@@ -11,12 +11,16 @@ import MemoUpdate from "./memo_update"
 import useBookStore from "@/stores/book-store"
 import useMemoStore from "@/stores/memo-store"
 import MemoApi from "@/api/memos"
+import ActivityApi from "@/api/activity"
+import useUserStore from "@/stores/user-store"
 
 const memoApi = new MemoApi()
+const activityApi= new ActivityApi()
 
 const MemoList = () => {
+    const { user } = useStore(useUserStore, (state) => state)
     const { selectedBook } = useStore(useBookStore, (state) => state)
-    const { memoList, deleteMemo, memo, setMemo, setMemoList } = useStore(useMemoStore, (state) => state)
+    const { memoList, deleteMemo,  setMemo, setMemoList } = useStore(useMemoStore, (state) => state)
     const [isOpen, setIsOpen] = useState(false)
     const [content, setContent] = useState('')
     const [title, setTitle] = useState('')
@@ -27,6 +31,11 @@ const MemoList = () => {
             memoApi.getMemosByBookId(selectedBook.id).then(data => {
                 setMemoList(data)
             })
+            activityApi.create(activityApi.generateActivity(
+                'book.select',
+                user,
+                activityApi.convertBookTarget(selectedBook)
+            ))
         }
     }, [selectedBook, setMemoList])
 
@@ -51,13 +60,23 @@ const MemoList = () => {
         setIsOpen(open)
     }
 
-    const toggleMemoExpansion = (memoId: number) => {
-        setExpandedMemoId(expandedMemoId === memoId ? null : memoId)
+    const toggleMemoExpansion = (selectedMemo: Memo) => {
+        setExpandedMemoId(expandedMemoId === selectedMemo.id ? null : selectedMemo.id)
+        activityApi.create(activityApi.generateActivity(
+            'memo.select',
+            user,
+            activityApi.convertMemoTarget(selectedMemo)
+        ))
     }
 
     const haldleDeleteMemo = async(memo:Memo)=>{
         const deletedMemo=await memoApi.delete(memo.id)
         deleteMemo(deletedMemo)
+        await activityApi.create(activityApi.generateActivity(
+            'memo.delete',
+            user,
+            activityApi.convertMemoTarget(memo)
+        ))
     }
 
     return (
@@ -68,7 +87,7 @@ const MemoList = () => {
                     <div key={memo.id} className="mb-2 bg-gray-50 rounded-lg shadow-sm overflow-hidden">
                         <div 
                             className="flex justify-between items-center p-3 cursor-pointer hover:bg-gray-100"
-                            onClick={() => toggleMemoExpansion(memo.id)}
+                            onClick={() => toggleMemoExpansion(memo)}
                         >
                             <div className="flex-1">
                                 <p className="font-medium text-gray-800 truncate">

@@ -21,9 +21,11 @@ import useUserStore from "@/stores/user-store"
 import { useStore } from 'zustand'
 import useBookStore from '@/stores/book-store'
 import BookApi from '@/api/books'
+import ActivityApi from '@/api/activity'
 
 const searchApi = new SearchApi()
 const bookApi = new BookApi()
+const activityApi = new ActivityApi()
 
 const searchBooks = async (query: string): Promise<SearchBook[]> => {
   await new Promise(resolve => setTimeout(resolve, 500)) // Simulate network delay
@@ -83,6 +85,11 @@ const BookCreate = () => {
         title:selectedBook.title,
         isPinned:false
       })
+      await activityApi.create(activityApi.generateActivity(
+        'book.create',
+        user,
+        activityApi.convertBookTarget(book)
+      ))
       addBook(book)
       setIsOpen(false)
       setSelectedBook(null)
@@ -95,6 +102,11 @@ const BookCreate = () => {
         title:manualTitle,
         isPinned:false
       })
+      await activityApi.create(activityApi.generateActivity(
+        'book.create',
+        user,
+        activityApi.convertBookTarget(book)
+      ))
       addBook(book)
       setIsOpen(false)
       setSelectedBook(null)

@@ -1,14 +1,14 @@
-import axios from "axios";
+import axiosInstance from './axiosInstance';
 
 class BookApi{
     private apiUrl: string;
 
     constructor(){
-        this.apiUrl='http://localhost:8080/api/books';
+        this.apiUrl='/books';
     }
 
     async create(bookCreate:BookCreate):Promise<Book>{
-        const response=await axios.post<Book>(
+        const response=await axiosInstance.post<Book>(
             `${this.apiUrl}`,
             bookCreate
         )
@@ -16,12 +16,12 @@ class BookApi{
     }
 
     async getBooksByUserId(userId:number,isPinned:boolean):Promise<Book[]>{
-        const response=await axios.get(`${this.apiUrl}/users/${userId}?isPinned=${isPinned}`)
+        const response=await axiosInstance.get(`${this.apiUrl}/users/${userId}?isPinned=${isPinned}`)
         return response.data
     }
 
     async update(bookId:number,bookUpdate:BookUpdate):Promise<Book>{
-        const response=await axios.put<Book>(
+        const response=await axiosInstance.put<Book>(
             `${this.apiUrl}/${bookId}`,
             bookUpdate
         )
@@ -29,7 +29,7 @@ class BookApi{
     }
 
     async delete(bookId:number){
-        await axios.delete(`${this.apiUrl}/${bookId}`)
+        await axiosInstance.delete(`${this.apiUrl}/${bookId}`)
     }
 }
 

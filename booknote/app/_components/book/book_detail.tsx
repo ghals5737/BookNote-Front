@@ -11,14 +11,20 @@ import useMemoStore from "@/stores/memo-store"
 import MemoList from "../memo/memo_list"
 import MemoApi from "@/api/memos"
 import BookApi from "@/api/books"
+import ActivityApi from "@/api/activity"
+import useUserStore from "@/stores/user-store"
+import { after } from "node:test"
+import moment from "moment"
 
 const memoApi=new MemoApi()
 const bookApi=new BookApi()
+const activityApi=new ActivityApi()
 
 const BookDetail=()=>{
     const {selectedBook,setSelectedBook,bookList,addBook,addPinBook,deletePinBook,deleteBook}=useStore(useBookStore,(state)=>state)
     const {memoList,setMemoList,memo,setMemo}=useStore(useMemoStore,(state)=>state)
     const [isWritingSectionOpen, setIsWritingSectionOpen] = useState(false)
+    const { user } = useStore(useUserStore, (state) => state)
 
     const togglePin = async() => {   
         await bookApi.update(
@@ -35,6 +41,14 @@ const BookDetail=()=>{
             deleteBook(toggleBook)
             addPinBook(toggleBook)
         }    
+        await activityApi.create(activityApi.generateActivity(
+            'book.update',
+            user,
+            {
+                before:activityApi.convertBookTarget(selectedBook) ,
+                after:activityApi.convertBookTarget(toggleBook)
+            } as BookUpdateTarget
+        ))
         setSelectedBook(toggleBook)
     }
     const writingSectionRef = useRef<HTMLDivElement>(null)

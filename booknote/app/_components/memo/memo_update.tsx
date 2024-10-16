@@ -9,8 +9,11 @@ import { useState, useEffect, useRef, memo } from 'react'
 import useMemoStore from "@/stores/memo-store"
 import MemoApi from "@/api/memos"
 import useBookStore from "@/stores/book-store"
+import ActivityApi from '@/api/activity'
+import useUserStore from "@/stores/user-store"
 
 const memoApi = new MemoApi()
+const activityApi = new ActivityApi()
 
 const MDEditor = dynamic(
     () => import("@uiw/react-md-editor").then((mod) => mod.default),
@@ -29,6 +32,7 @@ const MemoUpdate=({ isOpen, onOpenChange, title , content }: EditMemoDialogProps
     const [updateTitle, setUpdateTitle] = useState(title)
     const { memoList, memo, updateMemoList } = useStore(useMemoStore, (state) => state)
     const { selectedBook } = useStore(useBookStore, (state) => state)
+    const {user}=useStore(useUserStore,(state)=>state)   
 
     useEffect(() => {
         setUpdateContent(content);
@@ -40,6 +44,14 @@ const MemoUpdate=({ isOpen, onOpenChange, title , content }: EditMemoDialogProps
             title: updateTitle.trim()?updateTitle:`${selectedBook.title}(${memoList.length+1})`,
             content:updateContent            
         })
+        await activityApi.create(activityApi.generateActivity(
+            'memo.update',
+            user,
+            {
+                after:activityApi.convertMemoTarget(memo),
+                before:activityApi.convertMemoTarget(updateMemo)
+            }
+        ))
         updateMemoList(updateMemo)
         onOpenChange(false)
     }

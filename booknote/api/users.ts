@@ -1,24 +1,32 @@
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 
 class UserApi{
     private apiUrl: string;
 
   constructor() {
-    this.apiUrl = 'http://localhost:8080/api/users';
+    this.apiUrl = '/users';
   }
   
   async create(userCreate:UserCreate):Promise<User>{
-    const response=await axios.post<User>(
+    const response=await axiosInstance.post<User>(
       `${this.apiUrl}`,
       userCreate
     )    
     return response.data
   }
 
-  async login(userCreate:UserCreate):Promise<string>{
-    const response=await axios.post<string>(
+  async login(userCreate:UserCreate):Promise<Token>{
+    const response=await axiosInstance.post<Token>(
       `${this.apiUrl}/login`,
       userCreate
+    )
+    return response.data
+  }
+
+  async refresh(token:Token):Promise<string>{
+    const response=await axiosInstance.post<string>(
+      `${this.apiUrl}/refresh`,
+      token
     )
     return response.data
   }
