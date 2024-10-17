@@ -5,6 +5,7 @@ import { Book } from 'lucide-react'
 import UserDropDown from "../../user/user_dropdown"
 import BookList from "../../book/book_list"
 import BookCreate from "../../book/book_create"
+import Image from 'next/image';
 
 const BookSidebar=()=>{   
     return (
@@ -12,7 +13,7 @@ const BookSidebar=()=>{
             <div className="flex items-center justify-between mb-4">
                 <Link href="/book">
                     <h1 className="text-xl font-bold flex items-center text-gray-800">
-                    <Book className="mr-2" />
+                    <Book className="mr-2" />                    
                     Book Note
                     </h1>
                 </Link>
