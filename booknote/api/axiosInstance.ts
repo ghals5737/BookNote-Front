@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api`,
+  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
   withCredentials: true // API 기본 URL
 });
 
