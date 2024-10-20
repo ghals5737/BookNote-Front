@@ -34,7 +34,7 @@ jobs:
 
     - name: Send POST request to webhook
       run: |
-        curl -X POST webhook.booknote.site \
+        curl -X POST https://webhook.booknote.site \
         -H "Content-Type: application/json" \
         -d '{"status": "success", "message": "Deployment completed for tag ${{ github.ref_name }}", "authKey": "${{ secrets.WEBHOOK_AUTH_KEY }}", "serviceName": "BooknoteFront"}'
 
