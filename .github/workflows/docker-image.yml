@@ -36,7 +36,7 @@ jobs:
       run: |
         curl -X POST webhook.booknote.site \
         -H "Content-Type: application/json" \
-        -d '{"status": "success", "message": "Deployment completed for tag ${{ github.ref_name }}"}'
+        -d '{"status": "success", "message": "Deployment completed for tag ${{ github.ref_name }}", "authKey": "${{ secrets.WEBHOOK_AUTH_KEY }}", "serviceName": "BooknoteFront"}'
 
     - name: Logout from Docker registry
       run: docker logout registry.booknote.site
