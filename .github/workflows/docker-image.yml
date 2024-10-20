@@ -22,7 +22,7 @@ jobs:
     - name: Build Docker image
       run: |
         cd booknote
-        docker build . -t registry.booknote.site/booknote-front:${{ github.ref_name }}
+        docker build . -t registry.booknote.site/booknote-front:latest
       env:
         GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
         GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
@@ -30,7 +30,7 @@ jobs:
         NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
 
     - name: Push Docker image
-      run: docker push registry.booknote.site/booknote-front:${{ github.ref_name }}  
+      run: docker push registry.booknote.site/booknote-front:latest
 
     - name: Send POST request to webhook
       run: |
