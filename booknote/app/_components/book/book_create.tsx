@@ -131,8 +131,7 @@ const BookCreate = () => {
         <DialogHeader>
           <DialogTitle>새 책 추가</DialogTitle>
           <DialogDescription>
-            도서를 검색하거나 직접 제목을 입력하여 추가하세요.
-            {isLoading ? 'true':'false'}
+            도서를 검색하거나 직접 제목을 입력하여 추가하세요.            
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="search" className="w-full">
