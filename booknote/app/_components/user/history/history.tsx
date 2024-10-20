@@ -16,13 +16,11 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { DatePickerWithRange } from './datepicker_range'
 import ActivityApi from '@/api/activity'
+import { DateRange } from "react-day-picker"
 
 const activityApi = new ActivityApi()
 
-interface DateRange {
-  from: Date
-  to: Date
-}
+
 
 const activityOptions = [
   { value: "all", label: "모든 활동" },
@@ -158,7 +156,7 @@ const History = ({activityResponse,setActivityResponse,readingStatus}:HistoryPro
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <DatePickerWithRange date={dateRange} setDate={handleDateRange} />
+          <DatePickerWithRange date={dateRange} setDate={handleDateRange}/>
         </div>
         <ScrollArea className="h-[400px] w-full rounded-md border p-4">
           {activityResponse?.data.map((activity, index) => (

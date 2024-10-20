@@ -17,19 +17,17 @@ import moment from "moment"
  
 interface DatePickerWithRangeProps{
     date:DateRange| undefined
-    setDate:(newDateRange: DateRange | undefined)=>void
-    className: React.HTMLAttributes<HTMLDivElement>
+    setDate:(newDateRange: DateRange | undefined)=>void    
 }
 
 export function DatePickerWithRange({
     date,
-    setDate,
-    className,  
+    setDate,    
 }:DatePickerWithRangeProps) {
   
  
   return (
-    <div className={cn("grid gap-2", className)}>
+    <div className={cn("grid gap-2")}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
