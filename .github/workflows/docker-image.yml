@@ -30,7 +30,7 @@ jobs:
         NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
 
     - name: Push Docker image
-      run: docker push https://registry.booknote.site/booknote:${{ github.ref_name }}  
+      run: docker push registry.booknote.site/booknote:${{ github.ref_name }}  
 
     - name: Send POST request to webhook
       run: |
