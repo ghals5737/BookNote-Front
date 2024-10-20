@@ -23,6 +23,11 @@ jobs:
       run: |
         cd booknote
         docker build . -t registry.booknote.site/booknote:${{ github.ref_name }}
+      env:
+        GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+        GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+        NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
 
     - name: Push Docker image
       run: docker push registry.booknote.site/booknote:${{ github.ref_name }}  
