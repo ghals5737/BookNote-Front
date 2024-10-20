@@ -20,7 +20,9 @@ jobs:
       run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login registry.booknote.site -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
 
     - name: Build Docker image
-      run: docker build . -t registry.booknote.site/booknote:${{ github.ref_name }} 
+      run: |
+        cd booknote
+        docker build . -t registry.booknote.site/booknote:${{ github.ref_name }}
 
     - name: Push Docker image
       run: docker push registry.booknote.site/booknote:${{ github.ref_name }}  
