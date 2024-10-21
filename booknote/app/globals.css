@@ -71,7 +71,7 @@
   background-color: white !important;
 }
 
-.w-md-editor {
+/* .w-md-editor {
   text-align: left;
   border-radius: 3px;
   padding-bottom: 1px;  
@@ -81,10 +81,11 @@
   --md-editor-box-shadow-color: var(--color-border-default, #d0d7de);
   box-shadow: 0 0 0 1px var(--md-editor-box-shadow-color), 0 0 0 var(--md-editor-box-shadow-color), 0 1px 1px var(--md-editor-box-shadow-color);  
   border-color: #d0d7de !important;
-}
+} */
 
 .w-md-editor-content {
   background-color: white !important;
+  border-color: #d0d7de !important;
 }
 
 .w-md-editor-text-pre > code,
