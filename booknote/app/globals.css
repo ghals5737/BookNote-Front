@@ -71,6 +71,20 @@
   background-color: white !important;
 }
 
+.w-md-editor-text-pre > code,
+.w-md-editor-text-input {
+  color: black !important;
+}
+
+.w-md-editor-text-pre {
+  background-color: white !important;
+  color: black !important;
+}
+
+.wmde-markdown-color {
+  color: black !important;
+}
+
 .w-md-editor-preview {
   @apply prose prose-sm sm:prose lg:prose-lg xl:prose-xl ;
 }
