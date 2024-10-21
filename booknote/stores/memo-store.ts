@@ -17,14 +17,15 @@ const useMemoStore = create<memoState>((set)=>({
     id:0,
     book:{
       id: 0,
-      title: '',
-      author: '',
+      title: '',     
       user: {
         id: 0,
         email: '',
         name: '',
         picture: ''
       },
+      image: "",
+      order: 0,      
       isPinned: false,
       createAt: new Date(),
       updateAt: new Date(),
