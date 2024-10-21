@@ -84,8 +84,7 @@
 } */
 
 .w-md-editor-content {
-  background-color: white !important;
-  border-color: #d0d7de !important;
+  background-color: white !important;  
 }
 
 .w-md-editor-text-pre > code,
@@ -109,6 +108,7 @@
 
 .w-md-editor-preview {
   @apply prose prose-sm sm:prose lg:prose-lg xl:prose-xl ;
+  border-color: #d0d7de !important;
 }
 
 .w-md-editor-preview ::marker {
