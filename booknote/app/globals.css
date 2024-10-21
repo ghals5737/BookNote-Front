@@ -67,6 +67,10 @@
     @apply bg-background text-foreground;
   }
 }
+.wmde-markdown-var{
+  background-color: white !important;
+}
+
 .w-md-editor-content {
   background-color: white !important;
 }
@@ -80,10 +84,15 @@
   background-color: white !important;
   color: black !important;
 }
+/* .wmde-markdown-color {
+  color: black !important;
+} */
 
 .wmde-markdown-color {
   color: black !important;
+  background-color: white !important;
 }
+
 
 .w-md-editor-preview {
   @apply prose prose-sm sm:prose lg:prose-lg xl:prose-xl ;
