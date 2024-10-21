@@ -28,6 +28,8 @@ const useBookStore = create<bookState>((set) => ({
         picture: ''
       },
       isPinned: false,
+      image: '',
+      order:0,
       createAt: new Date(),
       updateAt: new Date(),
     },    
@@ -41,6 +43,8 @@ const useBookStore = create<bookState>((set) => ({
         picture: ''
       },
       isPinned: false,
+      image: '',
+      order:0,
       createAt: new Date(),
       updateAt: new Date(),
     },    

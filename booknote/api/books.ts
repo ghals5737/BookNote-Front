@@ -31,6 +31,13 @@ class BookApi{
     async delete(bookId:number){
         await axiosInstance.delete(`${this.apiUrl}/${bookId}`)
     }
+    async updateOrder(userId:number,bookOrderChages:BookOrderChange[]){
+        const response=await axiosInstance.put<Book>(
+            `${this.apiUrl}/orders/${userId}`,
+            bookOrderChages
+        )
+        return response.data
+    }
 }
 
 export default BookApi

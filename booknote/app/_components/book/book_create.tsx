@@ -43,7 +43,7 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const BookCreate = () => {
   const {user}=useStore(useUserStore,(state)=>state)    
-  const {addBook}=useStore(useBookStore,(state)=>state)  
+  const {addBook,bookList}=useStore(useBookStore,(state)=>state)  
   const [isOpen, setIsOpen] = useState(false)
   const [isFirst, setIsFirst] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -83,7 +83,9 @@ const BookCreate = () => {
       const book=await bookApi.create({
         userId:user.id,
         title:selectedBook.title,
-        isPinned:false
+        isPinned:false,
+        image:selectedBook.image,
+        order:bookList.length
       })
       await activityApi.create(activityApi.generateActivity(
         'book.create',
@@ -100,7 +102,9 @@ const BookCreate = () => {
       const book=await bookApi.create({
         userId:user.id,
         title:manualTitle,
-        isPinned:false
+        isPinned:false,
+        image:null,
+        order:bookList.length
       })
       await activityApi.create(activityApi.generateActivity(
         'book.create',
