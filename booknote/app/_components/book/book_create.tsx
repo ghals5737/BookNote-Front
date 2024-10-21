@@ -127,11 +127,11 @@ const BookCreate = () => {
       <DialogTrigger asChild>
         <Button variant="outline">책 추가</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[90vw] md:max-w-[800px] w-full">
         <DialogHeader>
           <DialogTitle>새 책 추가</DialogTitle>
           <DialogDescription>
-            도서를 검색하거나 직접 제목을 입력하여 추가하세요.            
+            도서를 검색하거나 직접 제목을 입력하여 추가하세요.
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="search" className="w-full">
@@ -145,28 +145,24 @@ const BookCreate = () => {
                 <Input
                   placeholder="도서명을 입력하세요"
                   value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value)      
-                  }}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 {searchQuery && (
                   <button
-                    onClick={() => {
-                      setSearchQuery('')
-                    }}
+                    onClick={() => setSearchQuery('')}
                     className="absolute right-2 top-1/2 -translate-y-1/2"
                   >
                     <X className="h-4 w-4 text-gray-500" />
                   </button>
                 )}
               </div>
-              <div className="flex">
-                <ScrollArea className="h-[400px] w-1/2 rounded-md border p-4 overflow-y-auto">
+              <div className="flex flex-col md:flex-row">
+                <ScrollArea className="h-[200px] md:h-[400px] w-full md:w-1/2 rounded-md border p-4 overflow-y-auto">
                   {isLoading ? (
                     <div className="flex items-center justify-center h-full">
-                      <Loader2 className="h-6 w-6 animate-spin" />                      
+                      <Loader2 className="h-6 w-6 animate-spin" />
                     </div>
-                  ) : searchResults.length > 0 ? (                    
+                  ) : searchResults.length > 0 ? (
                     <ul className="space-y-2">
                       {searchResults.map((book) => (
                         <li
@@ -178,7 +174,7 @@ const BookCreate = () => {
                           }`}
                           onMouseEnter={() => setHoveredBook(book)}
                           onMouseLeave={() => setHoveredBook(null)}
-                          onClick={() => handleSelectBook(book)}
+                          onClick={() => setSelectedBook(book)}
                         >
                           {book.title}
                         </li>
@@ -190,7 +186,7 @@ const BookCreate = () => {
                     <p className="text-center text-gray-500">도서명을 입력하세요.</p>
                   )}
                 </ScrollArea>
-                <div className="w-1/2 p-4">
+                <div className="w-full md:w-1/2 p-4 mt-4 md:mt-0">
                   {(hoveredBook || selectedBook) && (
                     <div className="rounded-md border p-4">
                       <Image
