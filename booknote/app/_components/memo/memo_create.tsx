@@ -45,6 +45,7 @@ const MemoCreate = () => {
 
     return (
         <div className="p-4">
+            <meta name="color-scheme" content="light"></meta>
             <input
                 type="text"
                 placeholder="제목을 입력하세요 (선택사항)"

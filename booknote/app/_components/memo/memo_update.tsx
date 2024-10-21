@@ -58,6 +58,7 @@ const MemoUpdate=({ isOpen, onOpenChange, title , content }: EditMemoDialogProps
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
+             <meta name="color-scheme" content="light"></meta>
             <DialogContent className="sm:max-w-[700px]">
                 <DialogHeader>
                 <DialogTitle>메모 수정</DialogTitle>

@@ -32,6 +32,7 @@ export async function GET(request: Request) {
         cookies().delete("access_token") 
         cookies().delete("refresh_token") 
         return NextResponse.redirect("https://booknote.site"+"/login");
+        //https://booknote.site
     }
     return NextResponse.json({ message: "Token refreshed" });
 }
